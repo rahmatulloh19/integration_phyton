@@ -10,6 +10,8 @@ function App() {
 	const [modalInfo, setModalInfo] = useState({
 		id: undefined,
 		name: "",
+		description: "",
+		is_done: false,
 	});
 	const [requested, setRequested] = useState(false);
 
@@ -34,18 +36,31 @@ function App() {
 		});
 	};
 
-	const handleEdit = () => {};
+	const handleEdit = (evt) => {
+		evt.preventDefault();
+		console.log(modalInfo.id);
+
+		console.log({
+			[evt.target[0].name]: evt.target[0].value,
+			[evt.target[1].name]: evt.target[1].value,
+			[evt.target[2].name]: evt.target[2].checked,
+		});
+
+		axios
+			.put(`http://localhost:8000/todo/${modalInfo.id}/`, {
+				[evt.target[0].name]: evt.target[0].value,
+				[evt.target[1].name]: evt.target[1].value,
+				[evt.target[2].name]: evt.target[2].checked,
+			})
+			.then((res) => setRequested((prev) => !prev));
+	};
 
 	useEffect(() => {
-		// axios
-		// 	.put("http://localhost:8000/todo/5/", {
-		// 		name: "Hello world1",
-		// 		description: "disney world1",
-		// 	})
-		// 	.then((res) => console.log(res));
-		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-		return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-	}, [requested]);
+		setTimeout(() => {
+			axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
+			return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
+		}, 1000);
+	}, [requested, modalInfo.is_done]);
 
 	return (
 		<>
@@ -94,7 +109,6 @@ function App() {
 					)}
 				</ul>
 			</div>
-
 			<Modal id="deleteModal">
 				<form className="d-flex align-items-end flex-wrap gap-3 p-3" onSubmit={handleDelete}>
 					<h4>Do you really want to delete this todo "{modalInfo.name}"</h4>
@@ -106,17 +120,51 @@ function App() {
 					</button>
 				</form>
 			</Modal>
-			<Modal id="editModal">
-				<form className="d-flex align-items-end flex-wrap gap-3 p-3" onSubmit={handleEdit}>
-					<h4>Do you really want to delete this todo "{modalInfo.name}"</h4>
-					<button className="btn btn-secondary ms-auto" type="button" data-bs-dismiss="modal">
-						Cancel
-					</button>
-					<button className="btn btn-warning" type="submit" data-bs-dismiss={"modal"}>
-						Edit
-					</button>
-				</form>
-			</Modal>
+			{
+				<Modal id="editModal">
+					<form className="d-flex align-items-end flex-wrap gap-3 p-3" onSubmit={handleEdit}>
+						<input
+							className="form-control"
+							name="name"
+							type="text"
+							required
+							placeholder="Edit todo"
+							maxLength={45}
+							defaultValue={modalInfo.name}
+						/>
+						<textarea
+							className="form-control"
+							name="description"
+							placeholder="Edit description todo ..."
+							maxLength={70}
+							defaultValue={modalInfo.description}
+							required></textarea>
+						<div className="d-flex w-100 gap-3">
+							<label className="d-flex align-items-center flex-grow-1 gap-3">
+								Is done ?
+								<input
+									style={{ width: "18px", height: "18px" }}
+									type="checkbox"
+									name="is_done"
+									checked={modalInfo.is_done}
+									onChange={(evt) => {
+										setModalInfo((prev) => ({ ...prev, is_done: evt.target.checked }));
+									}}
+								/>
+							</label>
+							<button
+								className="btn btn-secondary align-self-end"
+								type="button"
+								data-bs-dismiss="modal">
+								Cancel
+							</button>
+							<button className="btn btn-warning" type="submit" data-bs-dismiss={"modal"}>
+								Edit
+							</button>
+						</div>
+					</form>
+				</Modal>
+			}
 		</>
 	);
 }

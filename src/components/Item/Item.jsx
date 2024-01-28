@@ -1,22 +1,18 @@
-import { useState } from "react";
 import { Accordion } from "../Accordion/Accordion";
 
 export const Item = ({ id, title, description, name, is_done, setModalInfo }) => {
-	// const [close, setClose] = useState(false);
-	// console.log(title);
-
-	// setModalId((prev) => prev === id && name);
-
 	return (
 		<li
 			className="d-flex justify-content-between align-items-center list-group-item"
-			onClick={() => setModalInfo((prev) => ({ ...prev, id: id, name: name }))}>
+			onClick={() => setModalInfo((prev) => ({ ...prev, id, name, description, is_done }))}>
 			<div className="wrapper d-flex align-items-center flex-grow-1">
 				<input
-					className="form-check-input me-3"
+					className="me-3"
 					disabled
 					type="checkbox"
-					defaultChecked={is_done}
+					name="is_done"
+					style={{ width: "18px", height: "18px" }}
+					checked={is_done}
 				/>
 				<div className="wrapper  flex-grow-1 me-3">
 					<p className={`fs-4 ${is_done ? "text-decoration-line-through" : ""}`}>{name}</p>
