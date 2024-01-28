@@ -1,12 +1,14 @@
 import React from "react";
 
-export const Accordion = ({ title, children, id }) => {
+export const Accordion = ({ title, children, id, is_done }) => {
 	return (
 		<div className="accordion" id={`accordion${id}`}>
 			<div className="accordion-item border-0">
 				<h2 className="accordion-header" id={`heading${id}`}>
 					<button
-						className="accordion-button p-0 bg-transparent border-0 w-100"
+						className={`fs-4 accordion-button p-0 bg-transparent border-0 w-100 ${
+							is_done ? "text-decoration-line-through" : ""
+						}`}
 						type="button"
 						data-bs-toggle="collapse"
 						data-bs-target={`#collapse${id}`}

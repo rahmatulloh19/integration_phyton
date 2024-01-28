@@ -1,6 +1,6 @@
 import { Accordion } from "../Accordion/Accordion";
 
-export const Item = ({ id, title, description, name, is_done, setModalInfo }) => {
+export const Item = ({ id, description, name, is_done, setModalInfo }) => {
 	return (
 		<li
 			className="d-flex justify-content-between align-items-center list-group-item"
@@ -15,8 +15,7 @@ export const Item = ({ id, title, description, name, is_done, setModalInfo }) =>
 					checked={is_done}
 				/>
 				<div className="wrapper  flex-grow-1 me-3">
-					<p className={`fs-4 ${is_done ? "text-decoration-line-through" : ""}`}>{name}</p>
-					<Accordion title={title} id={id}>
+					<Accordion title={name} id={id} is_done={is_done}>
 						{description}
 					</Accordion>
 				</div>

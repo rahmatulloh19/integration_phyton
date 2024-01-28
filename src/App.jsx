@@ -26,6 +26,9 @@ function App() {
 			.then((res) => {
 				setRequested((prev) => !prev);
 			});
+
+		evt.target[0].value = "";
+		evt.target[1].value = "";
 	};
 
 	const handleDelete = (evt) => {
@@ -49,10 +52,8 @@ function App() {
 	};
 
 	useEffect(() => {
-		setTimeout(() => {
-			axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-			return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-		}, 1000);
+		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
+		return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data.reverse()));
 	}, [requested, modalInfo.is_done]);
 
 	return (
@@ -87,7 +88,6 @@ function App() {
 						todos.map((item) => {
 							return (
 								<Item
-									title={item.description.split(" ").slice(0, 4).join(" ")}
 									description={item.description}
 									is_done={item.is_done}
 									id={item.id}
