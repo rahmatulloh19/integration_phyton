@@ -3,9 +3,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
 import { useEffect, useState } from "react";
 import { Item } from "./components/Item/Item";
+import { Modal } from "./components/Modal/Modal";
 
 function App() {
 	const [todos, setTodos] = useState([]);
+	const [modalInfo, setModalInfo] = useState({
+		id: undefined,
+		name: "",
+	});
+	const [requested, setRequested] = useState(false);
 
 	const handleSubmit = (evt) => {
 		evt.preventDefault();
@@ -16,19 +22,21 @@ function App() {
 				[evt.target[1].name]: evt.target[1].value,
 			})
 			.then((res) => {
-				console.log(res);
+				setRequested((prev) => !prev);
 			});
-		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
 	};
 
-	useEffect(() => {
-		// axios
-		// 	.delete("http://localhost:8000/todo/?format=json/1", {
-		// 		name: "Hello world",
-		// 		description: "disney world",
-		// 	})
-		// 	.then((res) => console.log(res));
+	const handleDelete = (evt) => {
+		evt.preventDefault();
 
+		axios.delete(`http://localhost:8000/todo/${modalInfo.id}`).then((res) => {
+			setRequested((prev) => !prev);
+		});
+	};
+
+	const handleEdit = () => {};
+
+	useEffect(() => {
 		// axios
 		// 	.put("http://localhost:8000/todo/5/", {
 		// 		name: "Hello world1",
@@ -36,7 +44,8 @@ function App() {
 		// 	})
 		// 	.then((res) => console.log(res));
 		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-	}, [todos.length]);
+		return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
+	}, [requested]);
 
 	return (
 		<>
@@ -66,7 +75,7 @@ function App() {
 				</form>
 
 				<ul className="list-unstyled my-5 list-group">
-					{todos.length &&
+					{!!todos.length ? (
 						todos.map((item) => {
 							return (
 								<Item
@@ -76,11 +85,38 @@ function App() {
 									id={item.id}
 									name={item.name}
 									key={item.id}
+									setModalInfo={setModalInfo}
 								/>
 							);
-						})}
+						})
+					) : (
+						<h3 className="text-center">No todo</h3>
+					)}
 				</ul>
 			</div>
+
+			<Modal id="deleteModal">
+				<form className="d-flex align-items-end flex-wrap gap-3 p-3" onSubmit={handleDelete}>
+					<h4>Do you really want to delete this todo "{modalInfo.name}"</h4>
+					<button className="btn btn-secondary ms-auto" type="button" data-bs-dismiss="modal">
+						Cancel
+					</button>
+					<button className="btn btn-danger" type="submit" data-bs-dismiss={"modal"}>
+						Delete
+					</button>
+				</form>
+			</Modal>
+			<Modal id="editModal">
+				<form className="d-flex align-items-end flex-wrap gap-3 p-3" onSubmit={handleEdit}>
+					<h4>Do you really want to delete this todo "{modalInfo.name}"</h4>
+					<button className="btn btn-secondary ms-auto" type="button" data-bs-dismiss="modal">
+						Cancel
+					</button>
+					<button className="btn btn-warning" type="submit" data-bs-dismiss={"modal"}>
+						Edit
+					</button>
+				</form>
+			</Modal>
 		</>
 	);
 }

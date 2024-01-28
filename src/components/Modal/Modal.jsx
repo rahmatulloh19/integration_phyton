@@ -1,11 +1,8 @@
-import React from "react";
-
-export const Modal = ({ children }) => {
-	console.log(children);
+export const Modal = ({ children, id }) => {
 	return (
 		<div
 			className="modal fade"
-			id="exampleModal"
+			id={id}
 			tabIndex={-1}
 			aria-labelledby="exampleModalLabel"
 			aria-hidden="true">
