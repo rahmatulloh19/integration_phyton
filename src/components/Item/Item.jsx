@@ -3,7 +3,7 @@ import { Accordion } from "../Accordion/Accordion";
 export const Item = ({ id, description, name, is_done, setModalInfo }) => {
 	return (
 		<li
-			className="d-flex justify-content-between align-items-center list-group-item"
+			className="d-flex list-group-item-action justify-content-between align-items-center list-group-item"
 			onClick={() => setModalInfo((prev) => ({ ...prev, id, name, description, is_done }))}>
 			<div className="wrapper d-flex align-items-center flex-grow-1">
 				<input

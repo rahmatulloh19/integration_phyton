@@ -4,6 +4,20 @@ import "bootstrap/dist/js/bootstrap.min.js";
 import { useEffect, useState } from "react";
 import { Item } from "./components/Item/Item";
 import { Modal } from "./components/Modal/Modal";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const toastObj = {
+	position: "bottom-right",
+	autoClose: 3000,
+	hideProgressBar: false,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+	theme: "light",
+	transition: Slide,
+};
 
 function App() {
 	const [todos, setTodos] = useState([]);
@@ -25,7 +39,9 @@ function App() {
 			})
 			.then((res) => {
 				setRequested((prev) => !prev);
-			});
+				toast.success("Todo success added", toastObj);
+			})
+			.catch((err) => toast.error(err.message, toastObj));
 
 		evt.target[0].value = "";
 		evt.target[1].value = "";
@@ -34,9 +50,15 @@ function App() {
 	const handleDelete = (evt) => {
 		evt.preventDefault();
 
-		axios.delete(`http://localhost:8000/todo/${modalInfo.id}`).then((res) => {
-			setRequested((prev) => !prev);
-		});
+		axios
+			.delete(`http://localhost:8000/todo/${modalInfo.id}`)
+			.then((res) => {
+				setRequested((prev) => !prev);
+				toast.success("Todo success deleted", toastObj);
+			})
+			.catch((err) => {
+				toast.error(err.message, toastObj);
+			});
 	};
 
 	const handleEdit = (evt) => {
@@ -48,13 +70,19 @@ function App() {
 				[evt.target[1].name]: evt.target[1].value,
 				[evt.target[2].name]: evt.target[2].checked,
 			})
-			.then((res) => setRequested((prev) => !prev));
+			.then((res) => {
+				setRequested((prev) => !prev);
+				toast.success("Todo success edited", toastObj);
+			})
+			.catch((err) => {
+				toast.error(err.message, toastObj);
+			});
 	};
 
 	useEffect(() => {
 		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
 		return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data.reverse()));
-	}, [requested, modalInfo.is_done]);
+	}, [requested]);
 
 	return (
 		<>
@@ -158,6 +186,20 @@ function App() {
 					</form>
 				</Modal>
 			}
+
+			<ToastContainer
+				position="bottom-right"
+				autoClose={3000}
+				hideProgressBar={false}
+				newestOnTop
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss={false}
+				draggable
+				pauseOnHover
+				theme="light"
+				transition:Slide
+			/>
 		</>
 	);
 }
