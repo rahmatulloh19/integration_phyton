@@ -3,10 +3,10 @@ import React from "react";
 export const Accordion = ({ title, children, id }) => {
 	return (
 		<div className="accordion" id={`accordion${id}`}>
-			<div className="accordion-item">
+			<div className="accordion-item border-0">
 				<h2 className="accordion-header" id={`heading${id}`}>
 					<button
-						className="accordion-button"
+						className="accordion-button p-0 bg-transparent border-0 w-100"
 						type="button"
 						data-bs-toggle="collapse"
 						data-bs-target={`#collapse${id}`}
@@ -20,7 +20,7 @@ export const Accordion = ({ title, children, id }) => {
 					className="accordion-collapse collapse"
 					aria-labelledby={`heading${id}`}
 					data-bs-parent={`#accordion${id}`}>
-					<div className="accordion-body">{children}</div>
+					<div className="accordion-body p-0 bg-transparent ">{children}</div>
 				</div>
 			</div>
 		</div>
