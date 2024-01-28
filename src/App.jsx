@@ -28,7 +28,7 @@ function App() {
 		// 		description: "disney world",
 		// 	})
 		// 	.then((res) => console.log(res));
-		// axios.delete("http://localhost:8000/todo/2").then((res) => console.log(res));
+
 		// axios
 		// 	.put("http://localhost:8000/todo/5/", {
 		// 		name: "Hello world1",
@@ -36,7 +36,7 @@ function App() {
 		// 	})
 		// 	.then((res) => console.log(res));
 		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-	}, [todos]);
+	}, [todos.length]);
 
 	return (
 		<>
