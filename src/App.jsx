@@ -38,13 +38,6 @@ function App() {
 
 	const handleEdit = (evt) => {
 		evt.preventDefault();
-		console.log(modalInfo.id);
-
-		console.log({
-			[evt.target[0].name]: evt.target[0].value,
-			[evt.target[1].name]: evt.target[1].value,
-			[evt.target[2].name]: evt.target[2].checked,
-		});
 
 		axios
 			.put(`http://localhost:8000/todo/${modalInfo.id}/`, {
