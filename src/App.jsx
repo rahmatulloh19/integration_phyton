@@ -79,9 +79,12 @@ function App() {
 			});
 	};
 
+	const changeValue = (evt) => {
+		setModalInfo((prev) => ({ ...prev, [evt.target.value]: evt.target.value.trim() }));
+	};
+
 	useEffect(() => {
 		axios("http://localhost:8000/todo/").then((res) => setTodos(res.data));
-		return () => axios("http://localhost:8000/todo/").then((res) => setTodos(res.data.reverse()));
 	}, [requested]);
 
 	return (
@@ -151,15 +154,17 @@ function App() {
 							required
 							placeholder="Edit todo"
 							maxLength={45}
-							defaultValue={modalInfo.name}
+							value={modalInfo.name}
+							onChange={(evt) => changeValue(evt)}
 						/>
 						<textarea
 							className="form-control"
 							name="description"
 							placeholder="Edit description todo ..."
 							maxLength={70}
-							defaultValue={modalInfo.description}
-							required></textarea>
+							value={modalInfo.description}
+							required
+							onChange={(evt) => changeValue(evt)}></textarea>
 						<div className="d-flex w-100 gap-3">
 							<label className="d-flex align-items-center flex-grow-1 gap-3">
 								Is done ?

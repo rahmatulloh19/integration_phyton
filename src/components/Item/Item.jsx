@@ -4,7 +4,10 @@ export const Item = ({ id, description, name, is_done, setModalInfo }) => {
 	return (
 		<li
 			className="d-flex list-group-item-action justify-content-between align-items-center list-group-item"
-			onClick={() => setModalInfo((prev) => ({ ...prev, id, name, description, is_done }))}>
+			onClick={() => {
+				console.log("li bosildi");
+				setModalInfo(() => ({ id, name, description, is_done }));
+			}}>
 			<div className="wrapper d-flex align-items-center flex-grow-1">
 				<input
 					className="me-3"
@@ -33,7 +36,8 @@ export const Item = ({ id, description, name, is_done, setModalInfo }) => {
 					className="btn btn-warning"
 					type="button"
 					data-bs-toggle="modal"
-					data-bs-target="#editModal">
+					data-bs-target="#editModal"
+					onClick={() => setModalInfo({ id, name, description, is_done })}>
 					Edit
 				</button>
 			</div>
